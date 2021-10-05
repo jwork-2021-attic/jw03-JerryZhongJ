@@ -30,8 +30,8 @@ public class SteganographyFactory {
     }
 
     public static void main(String[] args) throws IOException {
-
-        SteganographyFactory.getSteganography("example/BubbleSorter.java","example/resources/bubble.jpeg");
+        if(args.length < 2) System.out.println("Arguments are not enough!");
+        SteganographyFactory.getSteganography(args[0],args[1]);
 
     }
 

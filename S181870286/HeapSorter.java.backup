@@ -1,0 +1,36 @@
+package S181870286;
+
+public class HeapSorter extends Sorter{
+    @Override
+    public void sort() {
+        buildHeap();
+        swap(0, elements.length - 1);
+        for (int i = elements.length - 1; i > 0; i--) {
+            siftDown(0, i);
+            swap(0, i - 1);
+        }
+    }
+
+    private void buildHeap() {
+        for(int i = elements.length - 1;i >= 0;i--)
+            siftDown(i, elements.length);
+    }
+
+    // 大根堆
+    private void siftDown(int st, int en){
+        int i, j;
+        for(i = st;i <= en;i = j){
+            int left = 2 * i + 1;
+            int right = left + 1;
+            if (left >= en)
+                break;
+            if(right >= en)
+                j = left;
+            else
+                j = elements[left] > elements[right] ? left : right;
+            
+            if(elements[i] < elements[j])
+                swap(i, j);
+        }
+    }
+}

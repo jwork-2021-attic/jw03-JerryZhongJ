@@ -42,7 +42,7 @@ public class SteganographyEncoder {
 
     public byte[] decodeByteArray() throws DecodingException {
         byte[] bytes = decode();
-        int nameSize = byteArrayToInt(Arrays.copyOfRange(bytes, 0, 4));
+        int nameSize = byteArrayToInt(Arrays.copyOfRange(bytes, 0, 4));         // nameSize is the length of 
         if (nameSize <= 0 || nameSize > (bytes.length - 8)) {
             throw new DecodingException("NameSize", nameSize);
         }
@@ -143,19 +143,21 @@ public class SteganographyEncoder {
         }
 
         int smallMask = (int) (Math.pow(2, bitsFromColor) - 1);
-        int curColor = 2;
-        int curPix = 0;
+        int curColor = 2;       // current color component：0, 1, 2
+        int curPix = 0;         // current pixel index
         int charOffset = 0;
 
         pixels[0] &= mask;
         for (byte aByte : bytes) {
             while (charOffset < 8) {
+                // next pixel
                 if (curColor < 0) {
                     curColor = 2;
                     curPix++;
+                    // remove low bits
                     pixels[curPix] &= mask;
                 }
-
+                // 右移优先级低！
                 char temp = (char) ((aByte >> 8 - bitsFromColor - charOffset) & smallMask);
                 pixels[curPix] |= (temp << curColor * 8);
 
@@ -200,13 +202,13 @@ public class SteganographyEncoder {
         }
         return result;
     }
-
+    // check if bits is one of {1, 2, 4, 8}
     private void checkBitsFromColor(int bitsFromColor) {
         if (!Arrays.asList(1, 2, 4, 8).contains(bitsFromColor)) {
             throw new IllegalArgumentException("Number of used bits from color must be in set {1,2,4,8}");
         }
     }
-
+    // 对RGB 3个分量生成长度为8 - bitsFromColor的掩码，掩高位
     private int calculateMask(int bitsFromColor) {
         int temp = (int) (Math.pow(2, bitsFromColor) - 1);
         int mask = 0;
@@ -224,7 +226,7 @@ public class SteganographyEncoder {
         }
         return result;
     }
-
+    // Decode byte array into int, here byte array must be of 4 long.
     private int byteArrayToInt(byte[] bytes) {
         if (bytes.length != 4) {
             return 0;

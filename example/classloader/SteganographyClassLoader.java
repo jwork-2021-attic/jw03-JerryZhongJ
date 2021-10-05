@@ -12,7 +12,7 @@ public class SteganographyClassLoader extends ClassLoader {
     private URL url;
 
     public SteganographyClassLoader(URL imageURL) {
-        super();
+        super();            // use System ClassLoader by default
         this.url = imageURL;
     }
 
